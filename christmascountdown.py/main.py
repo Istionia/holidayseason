@@ -30,12 +30,13 @@ def display_countdown(target_date: datetime):
             print("Merry Christmas!")
             break
 
-        days, remainder = divmod(time_until_target.seconds, 86400)
-        hours, remainder = divmod(remainder, 3600)
-        minutes, seconds = divmod(remainder, 60)
+        minutes, seconds = divmod(int(round(time_until_target.total_seconds())), 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+        weeks, days = divmod(days, 7)
 
-        countdown_str = "{:02} days {:02}:{:02}:{:02}".format(
-            days, hours, minutes, seconds
+        countdown_str = (
+            f"{weeks:02} weeks {days:02} days {hours:02}:{minutes:02}:{seconds:02}"
         )
 
         print(countdown_str, end="\r")
