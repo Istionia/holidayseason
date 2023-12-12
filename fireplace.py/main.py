@@ -1,41 +1,52 @@
 import pygame
 import sys
 import random
+from typing import List, Tuple, Union
 
 # Initialize Pygame
 pygame.init()
 
 # Set up window dimensions
-width, height = 800, 600
-win = pygame.display.set_mode((width, height))
+WIDTH, HEIGHT = 800, 600
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Virtual Fireplace")
 
 # Set up colors
-black = (30, 30, 30)  # Dark gray
-orange = (255, 165, 0)
-red = (255, 0, 0)
-fireplace_brown = (139, 69, 19)  # Darker brown
-fireplace_brown_light = (165, 100, 25)  # Lighter brown
+BLACK: Tuple[int, int, int] = (30, 30, 30)  # Dark gray
+ORANGE: Tuple[int, int, int] = (255, 165, 0)
+RED: Tuple[int, int, int] = (255, 0, 0)
+FIREPLACE_BROWN: Tuple[int, int, int] = (139, 69, 19)
 
+# Define Particle class
 class Particle:
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int) -> None:
+        """
+        Initialize a Particle.
+
+        Parameters:
+        - x (int): The x-coordinate of the particle.
+        - y (int): The y-coordinate of the particle.
+        """
         self.x = x
         self.y = y
-        self.size = random.randint(20, 30)
-        self.color = random.choice((orange, red, fireplace_brown_light))  # Use the lighter brown
+        self.size = random.randint(10, 20)
+        self.color = random.choice((ORANGE, RED, FIREPLACE_BROWN))
         self.speed = random.uniform(1, 3)
-        print(f"Particle created at ({self.x}, {self.y}) with color {self.color} and size {self.size}")
 
-    def move(self):
+    def move(self) -> None:
+        """Move the particle upward based on its speed."""
         self.y -= self.speed
 
-    def draw(self):
-        pygame.draw.circle(win, self.color, (self.x, int(self.y)), self.size)
-        print(f"Particle drawn at ({self.x}, {self.y}) with color {self.color}")
+    def draw(self) -> None:
+        """Draw the particle on the window."""
+        pygame.draw.circle(WIN, self.color, (self.x, int(self.y)), self.size)
 
 # Define main function
-def main():
-    particles = []
+def main() -> None:
+    """
+    Run the main loop to display the virtual fireplace.
+    """
+    particles: List[Particle] = []
     clock = pygame.time.Clock()
 
     while True:
@@ -46,28 +57,25 @@ def main():
 
         # Create new particles
         for _ in range(5):
-            new_particle = Particle(random.randint(350, 450), height)
+            new_particle = Particle(random.randint(350, 450), HEIGHT)
             particles.append(new_particle)
-            print(f"New particle created at ({new_particle.x}, {new_particle.y})")
 
         # Move and draw particles
         for particle in particles:
             particle.move()
             particle.draw()
-            print(f"Particle at ({particle.x}, {particle.y}) moved and drawn")
 
         # Remove particles that are out of the screen
         particles = [p for p in particles if p.y > 0]
 
-        # Fill the background with black
-        win.fill(black)
+        # Fill the background with dark gray
+        WIN.fill(BLACK)
 
         # Update the display
         pygame.display.flip()
 
         # Cap the frame rate
         clock.tick(30)
-        print("Frame updated")
 
 if __name__ == "__main__":
     main()
